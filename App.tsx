@@ -24,16 +24,31 @@ type FormData = {
   TotalProfit: string;
   TotalLosses: string;
   CashedOut: string;
-  model_name: string;
+  model_name: "logreg" | "randforest" | "gradboost" | "svm_rbf" | "mlp";
 };
 
 // Yup validation
 const schema = yup.object().shape({
-  Bet: yup.number().required(),
-  TotalGames: yup.number().integer().required(),
-  TotalProfit: yup.number().required(),
-  TotalLosses: yup.number().required(),
-  CashedOut: yup.number().required(),
+  Bet: yup
+    .string()
+    .required()
+    .transform((value) => (isNaN(Number(value)) ? undefined : Number(value))),
+  TotalGames: yup
+    .string()
+    .required()
+    .transform((value) => (isNaN(Number(value)) ? undefined : Number(value))),
+  TotalProfit: yup
+    .string()
+    .required()
+    .transform((value) => (isNaN(Number(value)) ? undefined : Number(value))),
+  TotalLosses: yup
+    .string()
+    .required()
+    .transform((value) => (isNaN(Number(value)) ? undefined : Number(value))),
+  CashedOut: yup
+    .string()
+    .required()
+    .transform((value) => (isNaN(Number(value)) ? undefined : Number(value))),
   model_name: yup
     .string()
     .oneOf(["logreg", "randforest", "gradboost", "svm_rbf", "mlp"])
@@ -89,11 +104,11 @@ export default function App() {
         body: JSON.stringify({
           ...data,
           // convert string → numeric
-          Bet: parseFloat(data.Bet),
-          TotalGames: parseInt(data.TotalGames, 10),
-          TotalProfit: parseFloat(data.TotalProfit),
-          TotalLosses: parseFloat(data.TotalLosses),
-          CashedOut: parseFloat(data.CashedOut),
+          Bet: Number(data.Bet),
+          TotalGames: Number(data.TotalGames),
+          TotalProfit: Number(data.TotalProfit),
+          TotalLosses: Number(data.TotalLosses),
+          CashedOut: Number(data.CashedOut),
         }),
       });
       const json = await res.json();
@@ -481,4 +496,3 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
 });
-
